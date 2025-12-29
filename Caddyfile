@@ -2,7 +2,7 @@
     auto_https off
 }
 
-http://{$PORT} {
+:{$PORT} {
     root * /app
     php_server
     file_server
