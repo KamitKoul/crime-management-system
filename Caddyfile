@@ -1,5 +1,5 @@
 {$PORT} {
     root * /app
     php_server
-    file_server
+    
 }
