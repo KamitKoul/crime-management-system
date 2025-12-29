@@ -13,6 +13,13 @@ RUN mkdir -p /app/uploads/images/videos && chmod -R 777 /app/uploads
 # Copy Caddyfile to the correct location where FrankenPHP looks for it
 COPY Caddyfile /etc/frankenphp/Caddyfile
 
+# Expose port 80 (helps Railway detect it)
+EXPOSE 80
+
+# Debug: Print a message during build
+RUN echo "Build complete. Ready to start."
+
+
 
 
 
