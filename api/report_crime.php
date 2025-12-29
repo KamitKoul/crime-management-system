@@ -48,12 +48,11 @@ if (!$stationId) {
     $stationId = 1; 
 }
 
-$sql = "INSERT INTO crimereports
-(UserID, StationID, CategoryID, Title, Description, LocationText, Latitude, Longitude)
-VALUES
-($userId, $stationId, $categoryId, '$title', '$description', '$locationText', $lat, $lng)";
+// Secure Prepared Statement
+$stmt = mysqli_prepare($conn, "INSERT INTO crimereports (UserID, StationID, CategoryID, Title, Description, LocationText, Latitude, Longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+mysqli_stmt_bind_param($stmt, "iiisssdd", $userId, $stationId, $categoryId, $title, $description, $locationText, $lat, $lng);
 
-if (mysqli_query($conn, $sql)) {
+if (mysqli_stmt_execute($stmt)) {
     $reportId = mysqli_insert_id($conn);
     
     // Handle Evidence Upload
@@ -74,9 +73,10 @@ if (mysqli_query($conn, $sql)) {
                 $targetFile = $targetDir . $newFileName;
                 
                 if (move_uploaded_file($tmpName, $targetFile)) {
-                    $evSql = "INSERT INTO evidencefiles (ReportID, FileURL, FileType)
-                              VALUES ($reportId, '$targetFile', '$fileType')";
-                    mysqli_query($conn, $evSql);
+                    // Prepared statement for evidence
+                    $evStmt = mysqli_prepare($conn, "INSERT INTO evidencefiles (ReportID, FileURL, FileType) VALUES (?, ?, ?)");
+                    mysqli_stmt_bind_param($evStmt, "iss", $reportId, $targetFile, $fileType);
+                    mysqli_stmt_execute($evStmt);
                 }
             }
         }

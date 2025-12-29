@@ -3,144 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - CrimeWatch</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Access CrimeWatch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #4f46e5;
             --primary-hover: #4338ca;
-            --bg-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --secondary: #7c3aed;
+            --bg-page: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
         }
+
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--bg-gradient);
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             margin: 0;
             padding: 20px;
         }
-        .login-card {
-            background: white;
-            padding: 48px;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            width: 100%;
-            max-width: 440px;
-            animation: slideUp 0.5s ease-out;
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .login-header {
+
+        /* 1. Main Welcome Header (Outside Container) */
+        .main-header {
             text-align: center;
             margin-bottom: 40px;
+            animation: slideDown 0.5s ease-out;
         }
-        .login-header .logo {
-            font-size: 2.5rem;
-            margin-bottom: 16px;
-            display: block;
-        }
-        .login-header h2 {
-            color: #111827;
-            font-size: 1.875rem;
-            font-weight: 800;
+        .main-header h1 {
+            font-size: 3rem;
+            font-weight: 900;
             margin: 0;
-            letter-spacing: -0.025em;
+            background: -webkit-linear-gradient(315deg, #1e293b 0%, #4f46e5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.03em;
         }
-        .login-header p {
-            color: #6b7280;
-            margin-top: 8px;
+        .main-header p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-top: 10px;
         }
-        .form-group {
-            margin-bottom: 24px;
+
+        /* 2. Main Card Container */
+        .auth-card {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-out;
         }
+
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        /* 3. Toggle Switcher */
+        .toggle-container {
+            display: flex;
+            background: #f1f5f9;
+            padding: 5px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .toggle-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .toggle-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* Forms */
+        .auth-form {
+            display: none; /* Hidden by default */
+            animation: fadeForm 0.3s ease-in-out;
+        }
+        .auth-form.active-form {
+            display: block; /* Show active */
+        }
+        @keyframes fadeForm { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .form-group { margin-bottom: 20px; }
         label {
             display: block;
             margin-bottom: 8px;
-            color: #374151;
             font-weight: 600;
-            font-size: 0.875rem;
+            font-size: 0.85rem;
+            color: var(--text-main);
         }
         input {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #f3f4f6;
+            border: 2px solid #e2e8f0;
             border-radius: 12px;
             font-size: 1rem;
             transition: all 0.2s;
             box-sizing: border-box;
-            background-color: #f9fafb;
+            background: #f8fafc;
         }
         input:focus {
             outline: none;
             border-color: var(--primary);
-            background-color: white;
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            background: white;
         }
-        button {
+
+        .btn {
             width: 100%;
             padding: 14px;
-            background-color: var(--primary);
-            color: white;
             border: none;
             border-radius: 12px;
             font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
-            margin-top: 8px;
+            color: white;
+            margin-top: 10px;
+            background-color: var(--primary);
         }
-        button:hover {
+        .btn:hover {
             background-color: var(--primary-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px -3px rgba(79, 70, 229, 0.3);
         }
-        .footer-link {
-            text-align: center;
-            margin-top: 32px;
-            font-size: 0.95rem;
-            color: #6b7280;
+
+        /* Register Specific Color Override */
+        .btn-register { background-color: var(--secondary); }
+        .btn-register:hover { background-color: #6d28d9; box-shadow: 0 8px 15px -3px rgba(124, 58, 237, 0.3); }
+
+        /* Toast Styles */
+        .toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        .footer-link a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 700;
+        .toast {
+            padding: 16px 24px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            transform: translateX(120%);
+            transition: transform 0.3s;
+            border-left: 6px solid #ccc;
         }
-        .footer-link a:hover {
-            text-decoration: underline;
-        }
+        .toast.show { transform: translateX(0); }
+        .toast-error { border-left-color: #ef4444; color: #991b1b; background-color: #fef2f2; }
+        .toast-success { border-left-color: #7c3aed; color: #5b21b6; background-color: #f5f3ff; }
+
     </style>
 </head>
 <body>
 
-<div class="login-card">
-    <div class="login-header">
-        <span class="logo">🛡️</span>
-        <h2>Welcome Back</h2>
-        <p>Enter your credentials to access your account</p>
+    <!-- Main Header Outside Container -->
+    <div class="main-header">
+        <h1>Welcome to CrimeWatch</h1>
+        <p>Your partner in community safety and reporting.</p>
     </div>
 
-    <form action="auth/login.php" method="POST">
-        <div class="form-group">
-            <label>Email Address</label>
-            <input type="email" name="email" required placeholder="name@example.com">
+    <!-- Single Card Container -->
+    <div class="auth-card">
+        
+        <!-- Toggle Switch -->
+        <div class="toggle-container">
+            <button class="toggle-btn active" onclick="switchTab('login')">Sign In</button>
+            <button class="toggle-btn" onclick="switchTab('register')">Sign Up</button>
         </div>
 
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" name="password" required placeholder="••••••••">
+        <!-- Login Form -->
+        <div id="login-form" class="auth-form active-form">
+            <form action="auth/login.php" method="POST">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" required placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn">Access Account</button>
+            </form>
         </div>
 
-        <button type="submit">Sign In</button>
-    </form>
+        <!-- Register Form -->
+        <div id="register-form" class="auth-form">
+            <form action="auth/register.php" method="POST">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" required placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" name="phone" placeholder="(555) 000-0000">
+                </div>
+                <div class="form-group">
+                    <label>Create Password</label>
+                    <input type="password" name="password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-register">Create Account</button>
+            </form>
+        </div>
 
-    <div class="footer-link">
-        New here? <a href="register.html">Create an account</a>
     </div>
-</div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // Tab Switching Logic
+        function switchTab(tab) {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const btns = document.querySelectorAll('.toggle-btn');
+
+            if (tab === 'login') {
+                loginForm.classList.add('active-form');
+                registerForm.classList.remove('active-form');
+                btns[0].classList.add('active');
+                btns[1].classList.remove('active');
+            } else {
+                loginForm.classList.remove('active-form');
+                registerForm.classList.add('active-form');
+                btns[0].classList.remove('active');
+                btns[1].classList.add('active');
+            }
+        }
+
+        // Toast Logic
+        function showToast(message, type = 'error') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            const icon = type === 'success' ? '✅' : '❌';
+            toast.innerHTML = `<span style="font-size:1.2rem">${icon}</span><span>${message}</span>`;
+            container.appendChild(toast);
+            toast.offsetHeight;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        }
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('error') === 'invalid') {
+                showToast("Invalid credentials. Please try again.", 'error');
+            } else if (urlParams.get('success') === 'registered') {
+                showToast("Account created! Please sign in.", 'success');
+                switchTab('login'); // Auto-switch to login on success
+            }
+        };
+    </script>
 
 </body>
 </html>

@@ -236,6 +236,81 @@ $allResult = mysqli_query($conn, $allSql);
         <a href="../auth/logout.php" class="btn-logout">Sign Out</a>
     </nav>
 
+    <style>
+        /* Toast Notification Styles */
+        .toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .toast {
+            padding: 16px 24px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            min-width: 300px;
+            transform: translateX(120%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-left: 6px solid #e2e8f0;
+        }
+        .toast.show { transform: translateX(0); }
+        .toast-error { border-left-color: #ef4444; color: #991b1b; background-color: #fef2f2; }
+        .toast-success { border-left-color: #10b981; color: #065f46; background-color: #f0fdf4; }
+        .toast-icon { font-size: 1.25rem; }
+    </style>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            const icon = type === 'success' ? '✅' : '❌';
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icon}</span>
+                <span class="toast-message">${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Force reflow
+            toast.offsetHeight;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        }
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const error = urlParams.get('error');
+            const success = urlParams.get('success');
+
+            if (error === 'officer_busy') {
+                showToast("This officer is already assigned to an active case. Please choose someone else.", 'error');
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } else if (success === 'assigned') {
+                showToast("Case has been successfully assigned to the officer.", 'success');
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        };
+    </script>
+
     <div class="main-content">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
             <h1 style="margin: 0; font-size: 1.8rem;">Dashboard</h1>
