@@ -1,14 +1,12 @@
-FROM php:8.2-apache
+FROM dunglas/frankenphp
 
-# Enable Apache rewrite (common for PHP apps)
-RUN a2enmod rewrite
+# Install mysqli extension
+RUN install-php-extensions mysqli
 
-# Copy application
-COPY . /var/www/html/
+# Copy application files
+COPY . /app
+WORKDIR /app
 
-# Permissions
-RUN chown -R www-data:www-data /var/www/html
+# FrankenPHP automatically uses the Caddyfile if present in the working directory
+# or we can be explicit if needed, but default behavior with /app works well.
 
-EXPOSE 80
-
-CMD ["apache2-foreground"]
