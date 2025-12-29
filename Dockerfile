@@ -10,14 +10,15 @@ WORKDIR /app
 # Ensure uploads directory is writable
 RUN mkdir -p /app/uploads/images/videos && chmod -R 777 /app/uploads
 
-# Copy Caddyfile to the correct location where FrankenPHP looks for it
-COPY Caddyfile /etc/frankenphp/Caddyfile
+# Copy Caddyfile to the correct location
+COPY Caddyfile /etc/caddy/Caddyfile
 
-# Expose port 80 (helps Railway detect it)
+# Expose port 80
 EXPOSE 80
 
-# Debug: Print a message during build
-RUN echo "Build complete. Ready to start."
+# Explicitly start FrankenPHP
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
+
 
 
 

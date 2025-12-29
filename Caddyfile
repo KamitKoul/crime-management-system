@@ -1,5 +1,4 @@
 :{$PORT} {
-    bind 0.0.0.0
     root * /app
     php_server
 }
