@@ -10,8 +10,9 @@ WORKDIR /app
 # Ensure uploads directory is writable
 RUN mkdir -p /app/uploads/images/videos && chmod -R 777 /app/uploads
 
-# Ensure FrankenPHP uses our Caddyfile
-ENV CADDYFILE=/app/Caddyfile
+# Copy Caddyfile to the default location where FrankenPHP looks for it
+COPY Caddyfile /etc/caddy/Caddyfile
+
 
 
 
