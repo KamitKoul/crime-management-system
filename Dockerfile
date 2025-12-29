@@ -7,6 +7,7 @@ RUN install-php-extensions mysqli
 COPY . /app
 WORKDIR /app
 
-# FrankenPHP automatically uses the Caddyfile if present in the working directory
-# or we can be explicit if needed, but default behavior with /app works well.
+# Tell FrankenPHP to listen on the port provided by Railway and disable TLS
+ENV SERVER_NAME=:80
+
 
