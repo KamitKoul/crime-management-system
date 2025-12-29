@@ -16,8 +16,9 @@ $lat = !empty($_POST['latitude']) ? $_POST['latitude'] : 0;
 $lng = !empty($_POST['longitude']) ? $_POST['longitude'] : 0;
 
 /* Find nearest police station */
-$stationId = 1; // Default fallback
+$stationId = null;
 
+// 1. Try to find the nearest station based on coordinates
 if ($lat != 0 && $lng != 0) {
     $stationQuery = "
     SELECT StationID FROM policestations
@@ -29,6 +30,22 @@ if ($lat != 0 && $lng != 0) {
         $station = mysqli_fetch_assoc($stationResult);
         $stationId = $station['StationID'];
     }
+}
+
+// 2. Fallback: If no coordinates or calculation failed, get ANY valid station (e.g., the first one)
+if (!$stationId) {
+    $fallbackSql = "SELECT StationID FROM policestations LIMIT 1";
+    $fallbackResult = mysqli_query($conn, $fallbackSql);
+    if ($fallbackResult && mysqli_num_rows($fallbackResult) > 0) {
+        $fallback = mysqli_fetch_assoc($fallbackResult);
+        $stationId = $fallback['StationID'];
+    }
+}
+
+// 3. Final Fallback: If table is empty, we cannot proceed safely with foreign key constraints.
+// Ideally, the system should have at least one station. We will try ID 1 as a last resort hail mary.
+if (!$stationId) {
+    $stationId = 1; 
 }
 
 $sql = "INSERT INTO crimereports
