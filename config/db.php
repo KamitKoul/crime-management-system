@@ -10,6 +10,7 @@ $port = getenv('MYSQLPORT');
 if (!$host || !$user || !$pass || !$db || !$port) {
     die("Missing database environment variables. Please check Railway MySQL plugin linkage.");
 }
+var_dump(getenv('MYSQLHOST'), getenv('MYSQLUSER'), getenv('MYSQLDATABASE'));// Debugging line to verify environment variables
 
 // Establish connection
 $conn = mysqli_connect($host, $user, $pass, $db, $port);
