@@ -6,9 +6,14 @@ $pass = getenv('MYSQLPASSWORD');
 $db   = getenv('MYSQLDATABASE');
 $port = getenv('MYSQLPORT');
 
-// Ensure all required variables are set
-if (!$host || !$user || !$pass || !$db || !$port) {
-    die("Missing database environment variables. Please check Railway MySQL plugin linkage.");
+// Ensure all required variables are set, or fall back to local defaults
+if (!$host || !$user || !$db || !$port) {
+    // Local Development Fallback
+    $host = 'localhost';
+    $user = 'root';
+    $pass = ''; // Default XAMPP password is empty
+    $db   = 'crime_management';
+    $port = 3306;
 }
 
 // Debugging line (optional) – shows values to confirm they’re set
