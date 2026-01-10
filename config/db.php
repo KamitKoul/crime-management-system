@@ -1,10 +1,15 @@
 <?php
-// Railway provides these variables automatically when you link a MySQL plugin
-$host = getenv('MYSQLHOST') ?: "localhost";
-$user = getenv('MYSQLUSER') ?: "root";
-$pass = getenv('MYSQLPASSWORD') ?: "";
-$db   = getenv('MYSQLDATABASE') ?: "crime_management";
-$port = getenv('MYSQLPORT') ?: "3306";
+// Use Railway-provided environment variables (from the linked MySQL plugin)
+$host = getenv('MYSQLHOST');
+$user = getenv('MYSQLUSER');
+$pass = getenv('MYSQLPASSWORD');
+$db   = getenv('MYSQLDATABASE');
+$port = getenv('MYSQLPORT');
+
+// Ensure all required variables are set
+if (!$host || !$user || !$pass || !$db || !$port) {
+    die("Missing database environment variables. Please check Railway MySQL plugin linkage.");
+}
 
 // Establish connection
 $conn = mysqli_connect($host, $user, $pass, $db, $port);
